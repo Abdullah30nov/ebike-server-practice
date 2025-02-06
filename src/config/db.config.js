@@ -18,6 +18,6 @@ const sequelize = new Sequelize(
     },
     logging: false, // Disable logging (optional)
   }
-);
+); 
 
 module.exports = sequelize;
