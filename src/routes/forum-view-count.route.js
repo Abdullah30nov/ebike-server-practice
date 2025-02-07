@@ -1,11 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const forum_view_count = require('../models/forum-view-count.model');
+const new_forum_main_category = require('../models/new-forum-main-category.model');
 
 // POST VIEW COUNT
 router.post('/api/forum-view-count/add',async (req , res )=>{
-        const {views} = req.body
-        const add_view_count = await forum_view_count.create({views});
+        const {views, category_cid} = req.body
+        if (!category_cid) {
+            return res.status(400).json({ error: "category_cid is required" });
+        }
+         const check_valid_cid =await new_forum_main_category.findByPk(category_cid)
+         if(!check_valid_cid){
+             return res.status(400).json({message:"InValid CID"});
+         }
+        const add_view_count = await forum_view_count.create({views,category_cid});
         res.status(201).json(
             {
                 message: add_view_count,
